@@ -2,13 +2,14 @@ package com.ing.assessment.rate.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
+
 @AllArgsConstructor
+@Getter
 public class InterestRate {
     private int maturityPeriod;
     private BigDecimal interestRate;
