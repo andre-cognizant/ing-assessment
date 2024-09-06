@@ -1,14 +1,14 @@
 package com.ing.assessment.mortgage.service;
 
+import com.ing.assessment.mortgage.domain.MortgageCheck;
 import com.ing.assessment.rate.dto.InterestRate;
 import com.ing.assessment.rate.repository.DataLoader;
-import com.ing.assessment.mortgage.domain.MortgageCheck;
+import com.ing.assessment.util.exception.IngAssessmentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 
 @Service
 public class MortgageCalculator {
@@ -33,12 +33,10 @@ public class MortgageCalculator {
     }
 
     private BigDecimal getInterestRate(int maturityPeriod) {
-        List<InterestRate> rates = dataLoader.getInterestRates();
-        for (InterestRate rate : rates) {
-            if (rate.getMaturityPeriod() == maturityPeriod) {
-                return rate.getInterestRate();
-            }
-        }
-        throw new RuntimeException("Interest rate not found for maturity period: " + maturityPeriod);
+        return dataLoader.getInterestRates().stream()
+                .filter(rate -> rate.getMaturityPeriod() == maturityPeriod)
+                .findFirst()
+                .map(InterestRate::getInterestRate)
+                .orElseThrow(() -> new IngAssessmentException("Interest rate not found for maturity period: " + maturityPeriod));
     }
 }
