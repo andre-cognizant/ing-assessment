@@ -1,10 +1,12 @@
 package com.ing.assessment.mortgage.domain;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 
 public record MortgageCheck(
-        BigDecimal income,
+        @NotNull BigDecimal income,
         int maturityPeriod,
-        BigDecimal loanValue,
-        BigDecimal homeValue
+        @NotNull BigDecimal loanValue,
+        @NotNull BigDecimal homeValue
 ) { }
