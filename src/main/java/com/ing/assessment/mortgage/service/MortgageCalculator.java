@@ -21,14 +21,17 @@ public class MortgageCalculator {
         BigDecimal annualInterestRate = getInterestRate(mortgageCheck.maturityPeriod());
         
         int numberOfPayments = mortgageCheck.maturityPeriod() * 12;
-        
-        BigDecimal totalAmount = loanValue.add(loanValue.multiply(annualInterestRate.divide(new BigDecimal(100))).multiply(new BigDecimal(mortgageCheck.maturityPeriod())));
-        
-        BigDecimal monthlyPayment = totalAmount.divide(new BigDecimal(numberOfPayments), 2, RoundingMode.HALF_UP);
+        BigDecimal totalDebt = calculateTotalDebt(mortgageCheck, loanValue, annualInterestRate);
+        BigDecimal monthlyPayment = totalDebt.divide(new BigDecimal(numberOfPayments), 2, RoundingMode.HALF_UP);
 
         return monthlyPayment;
     }
-    
+
+    private static BigDecimal calculateTotalDebt(MortgageCheck mortgageCheck, BigDecimal loanValue, BigDecimal annualInterestRate) {
+        return loanValue.add(loanValue.multiply(annualInterestRate.divide(new BigDecimal(100)))
+                .multiply(new BigDecimal(mortgageCheck.maturityPeriod())));
+    }
+
     private BigDecimal getInterestRate(int maturityPeriod) {
         List<InterestRate> rates = dataLoader.getInterestRates();
         for (InterestRate rate : rates) {
