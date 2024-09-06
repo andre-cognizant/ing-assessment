@@ -4,6 +4,8 @@
 
 To run this app:
 
+1. set the `ING_NAME` and `ING_PASSWORD` environment variables
+
 1. Execute the following command in your terminal:
    ```
    ./mvnw spring-boot:run
@@ -24,3 +26,5 @@ The `DataLoader` class generates a list containing the current mortgage rates. T
 
 **Note:** The monthly cost calculation is a simplified example. It calculates the total cost by summing the total fee with the loan value and then dividing by the number of months.
 
+## Next Steps
+Create integration tests for the application
