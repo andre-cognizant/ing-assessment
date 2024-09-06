@@ -1,6 +1,6 @@
-package com.ing.assessment.interest.repository;
+package com.ing.assessment.rate.repository;
 
-import com.ing.assessment.interest.dto.InterestRate;
+import com.ing.assessment.rate.dto.InterestRate;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

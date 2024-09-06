@@ -1,7 +1,7 @@
-package com.ing.assessment.interest.controller;
+package com.ing.assessment.rate.controller;
 
-import com.ing.assessment.interest.dto.InterestRate;
-import com.ing.assessment.interest.repository.DataLoader;
+import com.ing.assessment.rate.dto.InterestRate;
+import com.ing.assessment.rate.repository.DataLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,7 +1,7 @@
 package com.ing.assessment.mortgage.service;
 
-import com.ing.assessment.interest.dto.InterestRate;
-import com.ing.assessment.interest.repository.DataLoader;
+import com.ing.assessment.rate.dto.InterestRate;
+import com.ing.assessment.rate.repository.DataLoader;
 import com.ing.assessment.mortgage.domain.MortgageCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.ing.assessment.interest.dto;
+package com.ing.assessment.rate.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
