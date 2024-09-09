@@ -22,9 +22,8 @@ public class MortgageCalculator {
         
         int numberOfPayments = mortgageCheck.maturityPeriod() * 12;
         BigDecimal totalDebt = calculateTotalDebt(mortgageCheck, loanValue, annualInterestRate);
-        BigDecimal monthlyPayment = totalDebt.divide(new BigDecimal(numberOfPayments), 2, RoundingMode.HALF_UP);
 
-        return monthlyPayment;
+        return totalDebt.divide(new BigDecimal(numberOfPayments), 2, RoundingMode.HALF_UP);
     }
 
     private static BigDecimal calculateTotalDebt(MortgageCheck mortgageCheck, BigDecimal loanValue, BigDecimal annualInterestRate) {
