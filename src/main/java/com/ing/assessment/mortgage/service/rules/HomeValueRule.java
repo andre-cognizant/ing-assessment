@@ -6,8 +6,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class HomeValueRule implements MortgageRule {
 
-    @Override
-    public boolean isFeasible(MortgageCheck mortgageCheck) {
-        return mortgageCheck.loanValue().compareTo(mortgageCheck.homeValue()) <= 0;
-    }
+	@Override
+	public boolean isFeasible(MortgageCheck mortgageCheck) {
+		return mortgageCheck.loanValue().compareTo(mortgageCheck.homeValue()) <= 0;
+	}
+
 }

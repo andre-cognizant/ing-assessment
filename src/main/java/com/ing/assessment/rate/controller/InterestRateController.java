@@ -15,15 +15,16 @@ import java.util.List;
 @RequestMapping("/interest-rates")
 public class InterestRateController {
 
-    @Autowired
-    private DataLoader dataLoader;
+	@Autowired
+	private DataLoader dataLoader;
 
-    @GetMapping
-    public ResponseEntity<List<InterestRate>> getInterestRates() {
-        List<InterestRate> interestRates = dataLoader.getInterestRates();
-        if (interestRates == null || interestRates.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(interestRates, HttpStatus.OK);
-    }
+	@GetMapping
+	public ResponseEntity<List<InterestRate>> getInterestRates() {
+		List<InterestRate> interestRates = dataLoader.getInterestRates();
+		if (interestRates == null || interestRates.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(interestRates, HttpStatus.OK);
+	}
+
 }

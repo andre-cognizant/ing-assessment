@@ -21,33 +21,34 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class InterestRateControllerTest {
 
-    @Mock
-    private DataLoader dataLoader;
+	@Mock
+	private DataLoader dataLoader;
 
-    @InjectMocks
-    private InterestRateController interestRateController;
+	@InjectMocks
+	private InterestRateController interestRateController;
 
-    @Test
-    void testGetInterestRates_Null() {
-        when(dataLoader.getInterestRates()).thenReturn(null);
-        ResponseEntity<List<InterestRate>> response = interestRateController.getInterestRates();
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
+	@Test
+	void testGetInterestRates_Null() {
+		when(dataLoader.getInterestRates()).thenReturn(null);
+		ResponseEntity<List<InterestRate>> response = interestRateController.getInterestRates();
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+	}
 
-    @Test
-    void testGetInterestRates_Empty() {
-        when(dataLoader.getInterestRates()).thenReturn(new ArrayList<>());
-        ResponseEntity<List<InterestRate>> response = interestRateController.getInterestRates();
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
+	@Test
+	void testGetInterestRates_Empty() {
+		when(dataLoader.getInterestRates()).thenReturn(new ArrayList<>());
+		ResponseEntity<List<InterestRate>> response = interestRateController.getInterestRates();
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+	}
 
-    @Test
-    void testGetInterestRates_NotEmpty() {
-        List<InterestRate> interestRates = new ArrayList<>();
-        interestRates.add(new InterestRate(1, BigDecimal.valueOf(1.0), LocalDateTime.now()));
-        when(dataLoader.getInterestRates()).thenReturn(interestRates);
-        ResponseEntity<List<InterestRate>> response = interestRateController.getInterestRates();
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(interestRates, response.getBody());
-    }
+	@Test
+	void testGetInterestRates_NotEmpty() {
+		List<InterestRate> interestRates = new ArrayList<>();
+		interestRates.add(new InterestRate(1, BigDecimal.valueOf(1.0), LocalDateTime.now()));
+		when(dataLoader.getInterestRates()).thenReturn(interestRates);
+		ResponseEntity<List<InterestRate>> response = interestRateController.getInterestRates();
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(interestRates, response.getBody());
+	}
+
 }

@@ -14,31 +14,32 @@ import java.util.Random;
 @Component
 public class DataLoader {
 
-    private List<InterestRate> interestRates = new ArrayList<>();
+	private List<InterestRate> interestRates = new ArrayList<>();
 
-    @PostConstruct
-    public void loadData() {
-        interestRates = generateInterestRates();
-    }
+	@PostConstruct
+	public void loadData() {
+		interestRates = generateInterestRates();
+	}
 
-    public List<InterestRate> getInterestRates() {
-        return interestRates;
-    }
+	public List<InterestRate> getInterestRates() {
+		return interestRates;
+	}
 
-    // Generate 40 mocked interest rates at startup
-    private List<InterestRate> generateInterestRates() {
-        final BigDecimal INITIAL_RATE = new BigDecimal("5.000");
-        final int ONE_YEAR = 1;
-        final int FORTY_YEARS = 40;
-        BigDecimal interestRate = INITIAL_RATE;
+	// Generate 40 mocked interest rates at startup
+	private List<InterestRate> generateInterestRates() {
+		final BigDecimal INITIAL_RATE = new BigDecimal("5.000");
+		final int ONE_YEAR = 1;
+		final int FORTY_YEARS = 40;
+		BigDecimal interestRate = INITIAL_RATE;
 
-        for (int i = ONE_YEAR; i <= FORTY_YEARS; i++) {
-            interestRate = interestRate.subtract(new BigDecimal("0.010"));
-            BigDecimal formattedInterestRate = interestRate.setScale(3, RoundingMode.HALF_UP);
-            LocalDateTime lastUpdate = LocalDateTime.now().minusDays(new Random().nextInt(1, 31));
-            interestRates.add(new InterestRate(i, formattedInterestRate, lastUpdate));
-        }
+		for (int i = ONE_YEAR; i <= FORTY_YEARS; i++) {
+			interestRate = interestRate.subtract(new BigDecimal("0.010"));
+			BigDecimal formattedInterestRate = interestRate.setScale(3, RoundingMode.HALF_UP);
+			LocalDateTime lastUpdate = LocalDateTime.now().minusDays(new Random().nextInt(1, 31));
+			interestRates.add(new InterestRate(i, formattedInterestRate, lastUpdate));
+		}
 
-        return interestRates;
-    }
+		return interestRates;
+	}
+
 }

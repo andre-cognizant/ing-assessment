@@ -17,21 +17,22 @@ import java.util.Arrays;
 @Slf4j
 public class LoggerAOP {
 
-    @Before("execution(* com.ing.assessment..*(..))")
-    public void logMethodInputs(JoinPoint joinPoint) {
-        log.info("Logging method inputs for class: " + joinPoint.getTarget().getClass().getName() +
-                ", method: " + joinPoint.getSignature().getName() + " with args: " + Arrays.toString(joinPoint.getArgs()));
-    }
+	@Before("execution(* com.ing.assessment..*(..))")
+	public void logMethodInputs(JoinPoint joinPoint) {
+		log.info("Logging method inputs for class: " + joinPoint.getTarget().getClass().getName() + ", method: "
+				+ joinPoint.getSignature().getName() + " with args: " + Arrays.toString(joinPoint.getArgs()));
+	}
 
-    @AfterReturning(pointcut = "execution(* com.ing.assessment..*(..))", returning = "result")
-    public void logMethodOutputs(JoinPoint joinPoint, Object result) {
-        log.info("Logging method outputs for class: " + joinPoint.getTarget().getClass().getName() +
-                ", method: " + joinPoint.getSignature().getName() + " with result: " + result);
-    }
+	@AfterReturning(pointcut = "execution(* com.ing.assessment..*(..))", returning = "result")
+	public void logMethodOutputs(JoinPoint joinPoint, Object result) {
+		log.info("Logging method outputs for class: " + joinPoint.getTarget().getClass().getName() + ", method: "
+				+ joinPoint.getSignature().getName() + " with result: " + result);
+	}
 
-    @AfterThrowing(pointcut = "execution(* com.ing.assessment..*(..))", throwing = "ex")
-    public void logMethodException(JoinPoint joinPoint, Exception ex) {
-        log.error("Exception in method for class: " + joinPoint.getTarget().getClass().getName() +
-                ", method: " + joinPoint.getSignature().getName() + " with exception: " + ex.getMessage());
-    }
+	@AfterThrowing(pointcut = "execution(* com.ing.assessment..*(..))", throwing = "ex")
+	public void logMethodException(JoinPoint joinPoint, Exception ex) {
+		log.error("Exception in method for class: " + joinPoint.getTarget().getClass().getName() + ", method: "
+				+ joinPoint.getSignature().getName() + " with exception: " + ex.getMessage());
+	}
+
 }

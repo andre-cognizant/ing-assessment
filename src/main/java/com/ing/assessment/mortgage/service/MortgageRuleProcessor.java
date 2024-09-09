@@ -9,18 +9,19 @@ import java.util.List;
 @Service
 public class MortgageRuleProcessor {
 
-    private final List<MortgageRule> rules;
+	private final List<MortgageRule> rules;
 
-    public MortgageRuleProcessor(List<MortgageRule> rules) {
-        this.rules = rules;
-    }
+	public MortgageRuleProcessor(List<MortgageRule> rules) {
+		this.rules = rules;
+	}
 
-    public boolean isMortgageFeasible(MortgageCheck mortgageCheck) {
-        for (MortgageRule rule : rules) {
-            if (!rule.isFeasible(mortgageCheck)) {
-                return false;
-            }
-        }
-        return true;
-    }
+	public boolean isMortgageFeasible(MortgageCheck mortgageCheck) {
+		for (MortgageRule rule : rules) {
+			if (!rule.isFeasible(mortgageCheck)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

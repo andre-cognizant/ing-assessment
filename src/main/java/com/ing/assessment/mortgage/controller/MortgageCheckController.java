@@ -13,32 +13,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-
-
 @RestController
 @RequestMapping("/mortgage-check")
 public class MortgageCheckController {
 
-    private final MortgageRuleProcessor mortgageRuleProcessor;
-    private final MortgageCalculator mortgageCalculator;
+	private final MortgageRuleProcessor mortgageRuleProcessor;
 
-    public MortgageCheckController(MortgageRuleProcessor mortgageRuleProcessor, MortgageCalculator mortgageCalculator) {
-        this.mortgageRuleProcessor = mortgageRuleProcessor;
-        this.mortgageCalculator = mortgageCalculator;
-    }
+	private final MortgageCalculator mortgageCalculator;
 
-    @PostMapping
-    public ResponseEntity<MortgageCheckResponse> checkMortgage(@Valid @RequestBody MortgageCheck mortgageCheck) {
-        try {
-            boolean feasible = mortgageRuleProcessor.isMortgageFeasible(mortgageCheck);
-            BigDecimal monthlyCosts = mortgageCalculator.calculateMonthlyCosts(mortgageCheck);//I could have put a condition to only calculate if isfeasible is true, but I wasn't sure if I should.
-            MortgageCheckResponse response = new MortgageCheckResponse(feasible, monthlyCosts);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+	public MortgageCheckController(MortgageRuleProcessor mortgageRuleProcessor, MortgageCalculator mortgageCalculator) {
+		this.mortgageRuleProcessor = mortgageRuleProcessor;
+		this.mortgageCalculator = mortgageCalculator;
+	}
 
-        } catch (IngAssessmentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-    
+	@PostMapping
+	public ResponseEntity<MortgageCheckResponse> checkMortgage(@Valid @RequestBody MortgageCheck mortgageCheck) {
+		try {
+			MortgageCheckResponse response = new MortgageCheckResponse(
+					mortgageRuleProcessor.isMortgageFeasible(mortgageCheck),
+					mortgageCalculator.calculateMonthlyCosts(mortgageCheck));
+			return new ResponseEntity<>(response, HttpStatus.OK);
+
+		}
+		catch (IngAssessmentException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }

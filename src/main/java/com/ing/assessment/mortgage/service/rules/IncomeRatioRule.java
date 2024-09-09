@@ -9,11 +9,13 @@ import java.math.RoundingMode;
 @Service
 public class IncomeRatioRule implements MortgageRule {
 
-    private static final BigDecimal MAX_INCOME_RATIO = new BigDecimal(4);
+	private static final BigDecimal MAX_INCOME_RATIO = new BigDecimal(4);
 
-    @Override
-    public boolean isFeasible(MortgageCheck mortgageCheck) {
-        BigDecimal loanToIncomeRatio = mortgageCheck.loanValue().divide(mortgageCheck.income(), 2, RoundingMode.HALF_UP);
-        return loanToIncomeRatio.compareTo(MAX_INCOME_RATIO) <= 0;
-    }
+	@Override
+	public boolean isFeasible(MortgageCheck mortgageCheck) {
+		BigDecimal loanToIncomeRatio = mortgageCheck.loanValue()
+			.divide(mortgageCheck.income(), 2, RoundingMode.HALF_UP);
+		return loanToIncomeRatio.compareTo(MAX_INCOME_RATIO) <= 0;
+	}
+
 }

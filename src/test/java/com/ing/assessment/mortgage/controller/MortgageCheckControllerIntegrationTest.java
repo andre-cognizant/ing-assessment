@@ -30,128 +30,109 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class MortgageCheckControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
-    @Autowired
-    private DataLoader dataLoader;
+	@Autowired
+	private DataLoader dataLoader;
 
-    @Value("${spring.security.user.name}")
-    private String username;
-    @Value("${spring.security.user.name}")
-    private String password;
+	@Value("${spring.security.user.name}")
+	private String username;
 
-    @BeforeEach
-    void setUp() {
-        dataLoader.getInterestRates().clear();
-        dataLoader.getInterestRates().addAll(Arrays.asList(
-                new InterestRate(10, new BigDecimal("2.5"), LocalDateTime.now()),
-                new InterestRate(20, new BigDecimal("3.0"), LocalDateTime.now()),
-                new InterestRate(30, new BigDecimal("3.5"), LocalDateTime.now())
-        ));
-    }
+	@Value("${spring.security.user.name}")
+	private String password;
 
-    @Test
-    void testMortgageCheckFeasible() throws Exception {
-        MortgageCheck mortgageCheck = new MortgageCheck(
-                new BigDecimal("100000"),  
-                30,                        
-                new BigDecimal("300000"),  
-                new BigDecimal("400000")   
-        );
+	@BeforeEach
+	void setUp() {
+		dataLoader.getInterestRates().clear();
+		dataLoader.getInterestRates()
+			.addAll(Arrays.asList(new InterestRate(10, new BigDecimal("2.5"), LocalDateTime.now()),
+					new InterestRate(20, new BigDecimal("3.0"), LocalDateTime.now()),
+					new InterestRate(30, new BigDecimal("3.5"), LocalDateTime.now())));
+	}
 
-        MvcResult result = mockMvc.perform(post("/mortgage-check")
-                        .with(httpBasic(username, password))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mortgageCheck)))
-                .andExpect(status().isOk())
-                .andReturn();
+	@Test
+	void testMortgageCheckFeasible() throws Exception {
+		MortgageCheck mortgageCheck = new MortgageCheck(new BigDecimal("100000"), 30, new BigDecimal("300000"),
+				new BigDecimal("400000"));
 
-        MortgageCheckResponse response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), MortgageCheckResponse.class);
+		MvcResult result = mockMvc
+			.perform(post("/mortgage-check").with(httpBasic(username, password))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(mortgageCheck)))
+			.andExpect(status().isOk())
+			.andReturn();
 
-        assertTrue(response.feasible());
-        assertNotNull(response.monthlyCosts());
-        assertTrue(response.monthlyCosts().compareTo(BigDecimal.ZERO) > 0);
-    }
+		MortgageCheckResponse response = objectMapper.readValue(result.getResponse().getContentAsString(),
+				MortgageCheckResponse.class);
 
-    @Test
-    void testMortgageCheckNotFeasibleDueToHomeValue() throws Exception {
-        MortgageCheck mortgageCheck = new MortgageCheck(
-                new BigDecimal("100000"),  
-                30,                        
-                new BigDecimal("400000"),  
-                new BigDecimal("300000")   
-        );
+		assertTrue(response.feasible());
+		assertNotNull(response.monthlyCosts());
+		assertTrue(response.monthlyCosts().compareTo(BigDecimal.ZERO) > 0);
+	}
 
-        MvcResult result = mockMvc.perform(post("/mortgage-check")
-                        .with(httpBasic(username, password))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mortgageCheck)))
-                .andExpect(status().isOk())
-                .andReturn();
+	@Test
+	void testMortgageCheckNotFeasibleDueToHomeValue() throws Exception {
+		MortgageCheck mortgageCheck = new MortgageCheck(new BigDecimal("100000"), 30, new BigDecimal("400000"),
+				new BigDecimal("300000"));
 
-        MortgageCheckResponse response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), MortgageCheckResponse.class);
+		MvcResult result = mockMvc
+			.perform(post("/mortgage-check").with(httpBasic(username, password))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(mortgageCheck)))
+			.andExpect(status().isOk())
+			.andReturn();
 
-        assertFalse(response.feasible());
-        assertNotNull(response.monthlyCosts());
-    }
+		MortgageCheckResponse response = objectMapper.readValue(result.getResponse().getContentAsString(),
+				MortgageCheckResponse.class);
 
-    @Test
-    void testMortgageCheckNotFeasibleDueToIncomeRatio() throws Exception {
-        MortgageCheck mortgageCheck = new MortgageCheck(
-                new BigDecimal("50000"),   
-                30,                        
-                new BigDecimal("300000"),  
-                new BigDecimal("400000")   
-        );
+		assertFalse(response.feasible());
+		assertNotNull(response.monthlyCosts());
+	}
 
-        MvcResult result = mockMvc.perform(post("/mortgage-check")
-                        .with(httpBasic(username, password))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mortgageCheck)))
-                .andExpect(status().isOk())
-                .andReturn();
+	@Test
+	void testMortgageCheckNotFeasibleDueToIncomeRatio() throws Exception {
+		MortgageCheck mortgageCheck = new MortgageCheck(new BigDecimal("50000"), 30, new BigDecimal("300000"),
+				new BigDecimal("400000"));
 
-        MortgageCheckResponse response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), MortgageCheckResponse.class);
+		MvcResult result = mockMvc
+			.perform(post("/mortgage-check").with(httpBasic(username, password))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(mortgageCheck)))
+			.andExpect(status().isOk())
+			.andReturn();
 
-        assertFalse(response.feasible());
-        assertNotNull(response.monthlyCosts());
-    }
+		MortgageCheckResponse response = objectMapper.readValue(result.getResponse().getContentAsString(),
+				MortgageCheckResponse.class);
 
-    @Test
-    void testMortgageCheckWithInvalidMaturityPeriod() throws Exception {
-        MortgageCheck mortgageCheck = new MortgageCheck(
-                new BigDecimal("100000"),  
-                15,                         
-                new BigDecimal("300000"),  
-                new BigDecimal("400000")   
-        );
+		assertFalse(response.feasible());
+		assertNotNull(response.monthlyCosts());
+	}
 
-        mockMvc.perform(post("/mortgage-check")
-                        .with(httpBasic(username, password))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mortgageCheck)))
-                .andExpect(status().isBadRequest());
-    }
+	@Test
+	void testMortgageCheckWithInvalidMaturityPeriod() throws Exception {
+		MortgageCheck mortgageCheck = new MortgageCheck(new BigDecimal("100000"), 15, new BigDecimal("300000"),
+				new BigDecimal("400000"));
 
-    @Test
-    void testUnauthorizedAccess() throws Exception {
-        MortgageCheck mortgageCheck = new MortgageCheck(
-                new BigDecimal("100000"),  
-                30,                        
-                new BigDecimal("300000"),  
-                new BigDecimal("400000")   
-        );
+		mockMvc
+			.perform(post("/mortgage-check").with(httpBasic(username, password))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(mortgageCheck)))
+			.andExpect(status().isBadRequest());
+	}
 
-        mockMvc.perform(post("/mortgage-check")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mortgageCheck)))
-                .andExpect(status().isUnauthorized());
-    }
+	@Test
+	void testUnauthorizedAccess() throws Exception {
+		MortgageCheck mortgageCheck = new MortgageCheck(new BigDecimal("100000"), 30, new BigDecimal("300000"),
+				new BigDecimal("400000"));
+
+		mockMvc
+			.perform(post("/mortgage-check").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(mortgageCheck)))
+			.andExpect(status().isUnauthorized());
+	}
+
 }
